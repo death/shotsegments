@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
       numPixels = current.rows * current.cols;
       markers.push_back(0);
       if (saveImages) {
-        save(frame, currentColor, "in");
+        save(0, currentColor, "in");
       }
     }
 
@@ -152,6 +152,7 @@ int main(int argc, char *argv[])
     frame++;
   }
 
+  markers.push_back(frame - 1);
   if (saveImages) {
     save(frame - 1, previousColor, "out");
   }
