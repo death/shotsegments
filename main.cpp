@@ -20,6 +20,7 @@ enum {
 void usage();
 void save(int frame, cv::Mat image, const std::string & suffix);
 std::string timespec(int frame, double fps, int mode);
+std::string segmentfile(const std::string & basis, int segment);
 
 int main(int argc, char *argv[])
 {
@@ -171,7 +172,7 @@ int main(int argc, char *argv[])
                   << " -t " << timespec(end - start, fps, TS_DURATION)
                   << " -c copy"
                   << " -y"
-                  << " segment-" << segment << ".mp4"
+                  << " " << segmentfile(inputFile, segment)
                   << "\n";
       } else {
         std::cout << segment << ": " << markers[i - 1] << " - " << markers[i] << "\n";
@@ -225,5 +226,13 @@ std::string timespec(int frame, double fps, int mode)
      << std::setw(2) << hours << ":"
      << std::setw(2) << minutes << ":"
      << std::setw(2) << seconds;
+  return ss.str();
+}
+
+std::string segmentfile(const std::string & basis, int segment)
+{
+  size_t pos = basis.rfind('.');
+  std::ostringstream ss;
+  ss << basis.substr(0, pos) << "-" << segment << basis.substr(pos);
   return ss.str();
 }
