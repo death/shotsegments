@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
   int verbose = 0;
 
   while (1) {
-    static struct option long_options[] = {
+    static struct option longOptions[] = {
       {"in",           required_argument, 0, 'i'},
       {"save-images",  no_argument,       0, 's'},
       {"threshold",    required_argument, 0, 't'},
@@ -48,8 +48,7 @@ int main(int argc, char *argv[])
       {"help",         no_argument,       0, 'h'},
       {0,              0,                 0,  0 }
     };
-    int option_index;
-    int c = getopt_long(argc, argv, "i:st:m:fv::h", long_options, &option_index);
+    int c = getopt_long(argc, argv, "i:st:m:fv::h", longOptions, NULL);
     if (c < 0) {
       break;
     }
