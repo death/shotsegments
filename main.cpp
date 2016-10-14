@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
   cv::Mat currentColor;
   cv::Mat current;
   cv::Mat diffs;
-  int frame = 0;
+  int frame = 1;
   int numPixels = 0;
   int lastScore = 0;
   std::vector<int> markers;
@@ -118,18 +118,21 @@ int main(int argc, char *argv[])
     std::cout << "FPS=" << fps << "\n";
   }
 
+  if (!video.read(previousColor)) {
+    std::cerr << inputFile << ": need some frames\n";
+    return 1;
+  }
+
+  cv::cvtColor(previousColor, previous, CV_RGB2GRAY);
+  diffs = previous.clone();
+  numPixels = previous.rows * previous.cols;
+  markers.push_back(0);
+  if (saveImages) {
+    save(0, previousColor, "in");
+  }
+
   while (video.read(currentColor)) {
     cv::cvtColor(currentColor, current, CV_RGB2GRAY);
-    if (frame == 0) {
-      previous = current.clone();
-      previousColor = currentColor.clone();
-      diffs = current.clone();
-      numPixels = current.rows * current.cols;
-      markers.push_back(0);
-      if (saveImages) {
-        save(0, currentColor, "in");
-      }
-    }
 
     cv::absdiff(current, previous, diffs);
     cv::Scalar s = cv::sum(diffs);
