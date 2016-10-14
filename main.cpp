@@ -9,7 +9,7 @@
 #include <opencv2/highgui.hpp>
 
 const int DefaultThreshold = 50;
-const int DefaultMinDuration = 1000;
+const int DefaultMinLength = 1000;
 
 enum {
   TS_INPUT,
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
   bool saveImages = false;
   bool ffmpeg = false;
   int threshold = DefaultThreshold;
-  int minDuration = DefaultMinDuration;
+  int minLength = DefaultMinLength;
   int verbose = 0;
 
   while (1) {
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
       {"in",           required_argument, 0, 'i'},
       {"save-images",  no_argument,       0, 's'},
       {"threshold",    required_argument, 0, 't'},
-      {"min-duration", required_argument, 0, 'm'},
+      {"min-length",   required_argument, 0, 'm'},
       {"ffmpeg",       no_argument,       0, 'f'},
       {"verbose",      optional_argument, 0, 'v'},
       {"help",         no_argument,       0, 'h'},
@@ -67,9 +67,9 @@ int main(int argc, char *argv[])
       }
       break;
     case 'm':
-      minDuration = atoi(optarg);
-      if (minDuration == 0) {
-        minDuration = DefaultMinDuration;
+      minLength = atoi(optarg);
+      if (minLength == 0) {
+        minLength = DefaultMinLength;
       }
       break;
     case 'f':
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
   int segment = 0;
   for (size_t i = 1; i < markers.size(); i++) {
     int len = markers[i] - markers[i - 1];
-    if (len >= minDuration) {
+    if (len >= minLength) {
       segment++;
       int start = markers[i - 1];
       int end = markers[i];
@@ -191,7 +191,7 @@ void usage()
   std::cout << "usage: shotsegments --in <video-file>\n"
             << "                    [--save-images]\n"
             << "                    [--threshold t=" << DefaultThreshold << "]\n"
-            << "                    [--min-duration d=" << DefaultMinDuration << "]\n"
+            << "                    [--min-length d=" << DefaultMinLength << "]\n"
             << "                    [--ffmpeg]\n"
             << "                    [--verbose[=level]]\n"
             << "                    [--help]\n"
